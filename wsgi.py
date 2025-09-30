@@ -30,14 +30,15 @@ User Commands
 user_cli = AppGroup('user', help='User object commands') 
 
 # Then define the command and any parameters and annotate it with the group (@)
-'''
+
 @user_cli.command("create", help="Creates a user")
 @click.argument("username", default="rob")
 @click.argument("password", default="robpass")
 def create_user_command(username, password):
-    create_user(username, password)
+    # Provide a default email for init purposes
+    create_user(username, password, email=f"{username}@example.com")
     print(f'{username} created!')
-'''
+
 
 #New create user function
 @user_cli.command("create", help="Create a user with user_type")
