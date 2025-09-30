@@ -80,6 +80,59 @@ Then execute the command invoking with flask cli with command name and the relev
 ```bash
 $ flask user create bob bobpass
 ```
+# New commands for template
+@user_cli.command("create", help="Create a user with user_type")
+@click.argument("username")
+@click.argument("password")
+@click.argument("user_type", default="student")
+def create_user_command(username, password, user_type):
+    user = create_user(username, password, user_type)
+    print(f'{user_type.capitalize()}{user.username} created!')
+
+@user_cli.command("delete", help="Delete a user by ID")
+@click.argument("user_id", type=int)
+def delete_user_command(user_id):
+    success = delete_user(user_id)
+    if success:
+        print(f'User {user_id} deleted!')
+    else:
+        print("User not found.")
+
+student_cli = AppGroup('student', help='Student incentive commands')
+
+@student_cli.command("accolades", help="View accolades for student")
+@click.argument("student_id", type = int)
+def view_accolades(student_id):
+    print(get_student_accolades(student_id))
+
+@student_cli.command("leaderboard", help="View leaderboard")
+def leaderboard():
+    print(get_leaderboard())
+
+app.cli.add_command(student_cli)
+
+staff_cli = AppGroup('staff', help='Staff incentive commands')
+
+@staff_cli.command("log", help="Log hours for student")
+@click.argument("student_id", type=int)
+@click.argument("staff_id", type=int)
+@click.argument("hours", type=int)
+def log_command(student_id, staff_id, hours):
+    log = log_hours(student_id, staff_id, hours)
+    print(f"Logged {hours} hours for student {student_id}, log id={log.id}")
+
+@staff_cli.command("confirm", help="Confirm or reject student hours")
+@click.argument("log_id", type=int)
+@click.argument("staff_id", type=int)
+@click.argument("confirm", type=bool)
+def confirm_command(log_id, staff_id, confirm):
+    log = confirm_hours(log_id, staff_id, confirm)
+    if log:
+        print(f"Log {log.id} confirmed={log.confirmed}")
+    else:
+        print("Invalid log or staff ID")
+
+app.cli.add_command(staff_cli)
 
 
 # Running the Project
