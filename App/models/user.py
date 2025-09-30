@@ -19,6 +19,9 @@ class User(db.Model):
         self.email = email
         self.user_type = user_type
 
+    def __repr__(self):
+        return f"<{self.__class__.__name__} {self.username}>"
+
     def get_json(self):
         return{
             'id': self.id,
