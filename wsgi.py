@@ -75,7 +75,7 @@ app.cli.add_command(user_cli) # add the group to the cli
 #Group for student commands
 student_cli = AppGroup('student', help='Student incentive commands')
 
-@student_cli.command("acolades", help="View accolades for student")
+@student_cli.command("accolades", help="View accolades for student")
 @click.argument("student_id", type = int)
 def view_accolades(student_id):
     print(get_student_accolades(student_id))
@@ -102,7 +102,7 @@ def log_command(student_id, staff_id, hours):
 @click.argument("staff_id", type=int)
 @click.argument("confirm", type=bool)
 def confirm_command(log_id, staff_id, confirm):
-    log = log_hours(log_id, staff_id, confirm)
+    log = confirm_hours(log_id, staff_id, confirm)
     if log:
         print(f"Log {log.id} confirmed={log.confirmed}")
     else:
