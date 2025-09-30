@@ -1,13 +1,15 @@
 from App.models import User, Student, Staff, HourLog
 from App.database import db
 
-def create_user(username, password, user_type="student"):
+def create_user(username, password, email=None, user_type="student"):
+    if email is None:
+        email = f"{username}@example.com"
     if user_type == "student":
-        newuser = Student(username=username, password=password)
+        newuser = Student(username=username, password=password, email=email)
     elif user_type == "staff":
-        newuser = Staff(username=username, password=password)
+        newuser = Staff(username=username, password=password, email=email)
     elif user_type == "admin":
-        newuser = User(username=username, password=password, user_type="admin")
+        newuser = User(username=username, password=password, email=email, user_type="admin")
     else:
         raise ValueError("Invalid role")
     db.session.add(newuser)
